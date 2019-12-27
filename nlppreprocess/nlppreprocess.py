@@ -1,12 +1,12 @@
-to_replace = {'don\'t': 'do not', 'dont': 'do not',
-              'doesn\'t': 'does not', 'doesnt': 'does not',
-              'didn\'t': 'did not', 'didnt': 'did not',
-              'shouldn\'t': 'should not', 'shouldnt': 'should not',
-              'haven\'t': 'have not', 'hvn\'t': 'have not',
-              'havent': 'have not', 'hadn\'t': 'had not',
-              'hadnt': 'had not', 'cannt': 'can not',
-              'cann\'t': 'can not', 'couldn\'t': 'could not',
-              'couldnt': 'could not', 'nt': 'not'}
+to_replace = {"don't": "do not", "dont": "do not",
+              "doesn't": "does not", "doesnt": "does not",
+              "didn't": "did not", "didnt": "did not",
+              "shouldn't": "should not", "shouldnt": "should not",
+              "haven't": "have not", "hvn't": "have not",
+              "havent": "have not", "hadn't": "had not",
+              "hadnt": "had not", "cannt": "can not",
+              "cann't": "can not", "couldn't": "could not",
+              "couldnt": "could not", "nt": "not"}
 
 stopwords = ['i', 'me', 'mine', 'he', 'she', 'it', 'a', 'an', 'the',
              'above', 'below', 'while', 'as', 'until', 'of', 'at',
@@ -22,6 +22,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.stem.snowball import SnowballStemmer
 
 class NLP():
+    escape_char = chr(8217)
     def __init__(self, remove_stopwords=True, replace_words=True,
                  remove_numbers=True, remove_html_tags=True,
                  remove_punctuations=True, lemmatize=False,
@@ -35,11 +36,11 @@ class NLP():
             default value = True
         """
         if (type(remove_stopwords) != bool or
-            type(replace_words) != bool or
-            type(remove_numbers) != bool or
-            type(remove_html_tags) != bool or
-            type(remove_punctuations) != bool or
-            type(lemmatize) != bool):
+                type(replace_words) != bool or
+                type(remove_numbers) != bool or
+                type(remove_html_tags) != bool or
+                type(remove_punctuations) != bool or
+                type(lemmatize) != bool):
             raise Exception("Error - expecting a boolean parameter")
         if lemmatize_method not in ['wordnet', 'snowball']:
             raise Exception("Error - lemmatizer method not supported")
@@ -58,7 +59,7 @@ class NLP():
             self.lemmatizer = WordNetLemmatizer()
         if self.lemmatize_method == 'snowball':
             self.lemmatizer = SnowballStemmer('english')
-    
+
 
     def remove_stopwords_fun(self):
         """
@@ -81,9 +82,9 @@ class NLP():
 
         cleaned_doc = []
         for word in str(self.doc).split():
-            if word.lower() in self.replacement_list.keys():
-                cleaned_doc.append(self.replacement_list[word.lower()])
-            else:
+            try:
+                cleaned_doc.append(self.replacement_list[word.lower().replace(self.escape_char, '\'')])
+            except:
                 cleaned_doc.append(word)
         self.doc = ' '.join(cleaned_doc)
 
@@ -108,7 +109,7 @@ class NLP():
         """
         This function uses regex to remove alk the
         punctations from the doc.
-        """ 
+        """
         self.doc = re.sub('[^a-zA-Z0-9]', ' ', self.doc)
 
     def lemmatize_fun(self):
@@ -119,7 +120,7 @@ class NLP():
         ---------------------------
         Example:
         lemmatize(method='snowball')
-        
+
         default value = 'wordnet
         """
         tokens = str(self.doc).split()
@@ -128,7 +129,7 @@ class NLP():
             cleaned_tokens = [self.lemmatizer.lemmatize(token) for token in tokens]
         else:
             cleaned_tokens = [self.lemmatizer.stem(token) for token in tokens]
-       
+
         self.doc = ' '.join(cleaned_tokens)
 
     def add_stopword(self, args):
@@ -146,7 +147,7 @@ class NLP():
         if type(args) != list:
             raise Exception("Error - pass stopwords in list")
         for arg in args:
-            self.stopword_list.add(arg)
+            self.stopword_list.add(arg.lower())
 
     def add_replacement(self, args):
         """
@@ -166,7 +167,7 @@ class NLP():
             raise Exception("Error - list is empty")
         try:
             for key, value in args:
-                self.replacement_list[key] = value
+                self.replacement_list[key.lower()] = value
         except:
             print("Expected args in dict format")
 
@@ -233,7 +234,7 @@ class NLP():
         if self.remove_numbers is True:
             self.remove_numbers_fun()
         if self.remove_punctations is True:
-            self.remove_punctations_fun() 
+            self.remove_punctations_fun()
         if self.lemmatize is True:
             self.lemmatize_fun()
         return self.doc
