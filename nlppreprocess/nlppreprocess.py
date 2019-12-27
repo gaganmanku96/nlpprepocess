@@ -131,7 +131,7 @@ class NLP():
        
         self.doc = ' '.join(cleaned_tokens)
 
-    def add_stopword(self, *args):
+    def add_stopword(self, args):
         """
         This function is used to add new stopwords
         to the predefined list
@@ -148,24 +148,24 @@ class NLP():
         for arg in args:
             self.stopword_list.add(arg)
 
-    def add_replacement(self, *args):
+    def add_replacement(self, args):
         """
         This function is used to add new replacement words
         to the predifined list
-        Parameters - [  = ""]
+        Parameters - [tuple(string, string)]
         ----------------------------
         Example -
         obj = NLP()
-        obj.add_replacement([first: "replacement1", second: "replacement2"])
+        obj.add_replacement([("original", "replacement")])
         """
         if self.replace_words is False:
             raise Exception("Please enable cleaning of stopwords")
         if type(args) != list:
             raise Exception("Error - pass input parameters in list")
-        if args == []:
+        if not args:
             raise Exception("Error - list is empty")
         try:
-            for key, value in args.items():
+            for key, value in args:
                 self.replacement_list[key] = value
         except:
             print("Expected args in dict format")
