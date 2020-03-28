@@ -23,7 +23,7 @@ from nltk.stem.snowball import SnowballStemmer
 
 class NLP():
     def __init__(self, remove_stopwords=True, replace_words=True,
-                 remove_numbers=True, remove_html_tags=True,
+                 replace_numbers=True, remove_html_tags=True,
                  remove_punctuations=True, lemmatize=False,
                  lemmatize_method='wordnet'):
         """
@@ -36,7 +36,7 @@ class NLP():
         """
         if (type(remove_stopwords) != bool or
             type(replace_words) != bool or
-            type(remove_numbers) != bool or
+            type(replace_numbers) != bool or
             type(remove_html_tags) != bool or
             type(remove_punctuations) != bool or
             type(lemmatize) != bool):
@@ -47,7 +47,7 @@ class NLP():
         self.lemmatizer = None
         self.remove_stopwords = remove_stopwords
         self.replace_words = replace_words
-        self.remove_numbers = remove_numbers
+        self.replace_numbers = replace_numbers
         self.remove_html_tags = remove_html_tags
         self.remove_punctations = remove_punctuations
         self.lemmatize_method = lemmatize_method
@@ -87,12 +87,12 @@ class NLP():
                 cleaned_doc.append(word)
         self.doc = ' '.join(cleaned_doc)
 
-    def remove_numbers_fun(self):
+    def replace_numbers_fun(self):
         """
         This function uses regex to remve
         all the numbers from the doc.
         """
-        self.doc = re.sub("[0-9]", "", self.doc)
+        self.doc = re.sub("[0-9]+", "number", self.doc)
 
     def remove_html_tags_fun(self):
         """
@@ -230,8 +230,8 @@ class NLP():
             self.remove_html_tags_fun()
         if self.remove_stopwords is True:
             self.remove_stopwords_fun()
-        if self.remove_numbers is True:
-            self.remove_numbers_fun()
+        if self.replace_numbers is True:
+            self.replace_numbers_fun()
         if self.remove_punctations is True:
             self.remove_punctations_fun() 
         if self.lemmatize is True:
