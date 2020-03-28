@@ -89,24 +89,21 @@ class NLP():
 
     def remove_numbers_fun(self):
         """
-        This function uses regex to remve
+        This function uses regex to remove
         all the numbers from the doc.
         """
         self.doc = re.sub("[0-9]", "", self.doc)
 
     def remove_html_tags_fun(self):
         """
-        This function uses regex's complile method
-        to remove all the HTML tags from the doc
+        This function uses regex to remove
+        all the HTML tags from the doc
         """
-        cleaner = re.compile('<.*?>')
-        cleaned_text = re.sub(cleaner, '', self.doc)
-        cleaned_text = re.sub('[\n\t]', '', cleaned_text)
-        self.doc = cleaned_text
+        self.doc = re.sub(r"<[^<>]+>", ' ', self.doc)
 
     def remove_punctations_fun(self):
         """
-        This function uses regex to remove alk the
+        This function uses regex to remove all the
         punctations from the doc.
         """ 
         self.doc = re.sub('[^a-zA-Z0-9]', ' ', self.doc)
