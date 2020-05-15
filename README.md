@@ -30,7 +30,7 @@ NLPPREPROCESS is a preprocessing package for NLP task. The main objective of the
 
 # Usage
 ```
->>> from nlpuitls import NLP
+>>> from nlppreprocess import NLP
 >>> obj = NLP()
 ```
  ## Parameters
@@ -47,10 +47,10 @@ NLPPREPROCESS is a preprocessing package for NLP task. The main objective of the
  ```
  ## Using with Pandas Library
  ```
- >>> dataFrame['text'] = dataFrame['text].apply(obj.process)
+ >>> dataFrame['text'] = dataFrame['text'].apply(obj.process)
 
  ```
- ## Using with plain textx
+ ## Using with plain text
  ```
  >>> print(obj.process("Pass a text here"))
  ```
@@ -62,5 +62,5 @@ NLPPREPROCESS is a preprocessing package for NLP task. The main objective of the
  ## Add more replace words
  ```
  >>> obj = NLP()
- >>> obj.add_replacement([this="by this", this="by this"])
+ >>> obj.add_replacement([("original", "replacement")])
  ```
